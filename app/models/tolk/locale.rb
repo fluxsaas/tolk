@@ -159,6 +159,14 @@ module Tolk
       phrases
     end
 
+    def search_phrases_from_key(query, scope)
+      return [] unless query.present?
+
+      phrases = Tolk::Phrase.scoped(:order => 'tolk_phrases.key ASC')
+      phrases = phrases.scoped(:conditions => ['tolk_phrases.key LIKE ?', "%#{query}%"])
+      phrases
+    end
+
     def search_phrases_without_translation(query)
       return phrases_without_translation unless query.present?
 

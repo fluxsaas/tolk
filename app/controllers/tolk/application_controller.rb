@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Tolk
   class ApplicationController < ActionController::Base
     helper :all

@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Tolk
   class Translation < ActiveRecord::Base
     set_table_name "tolk_translations"

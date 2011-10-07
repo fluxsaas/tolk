@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Tolk
   class Locale < ActiveRecord::Base
     set_table_name "tolk_locales"
@@ -115,30 +117,34 @@ module Tolk
       translations.count(:conditions => {:'tolk_translations.primary_updated' => true}) > 0
     end
 
-    def phrases_with_translation(page = nil)
-      find_phrases_with_translations(page, :'tolk_translations.primary_updated' => false)
+    def phrases_with_translation
+      find_phrases_with_translations(:'tolk_translations.primary_updated' => false)
     end
 
-    def phrases_with_updated_translation(page = nil)
-      find_phrases_with_translations(page, :'tolk_translations.primary_updated' => true)
+    def phrases_with_updated_translation
+      find_phrases_with_translations(:'tolk_translations.primary_updated' => true)
     end
-
+    
+    def count_phrases_with_translation
+      existing_ids = self.translations.all(:select => 'tolk_translations.phrase_id').map(&:phrase_id).uniq
+      existing_ids.count
+    end
+    
     def count_phrases_without_translation
       existing_ids = self.translations.all(:select => 'tolk_translations.phrase_id').map(&:phrase_id).uniq
       Tolk::Phrase.count - existing_ids.count
     end
 
-    def phrases_without_translation(page = nil, options = {})
+    def phrases_without_translation
       phrases = Tolk::Phrase.scoped(:order => 'tolk_phrases.key ASC')
 
       existing_ids = self.translations.all(:select => 'tolk_translations.phrase_id').map(&:phrase_id).uniq
       phrases = phrases.scoped(:conditions => ['tolk_phrases.id NOT IN (?)', existing_ids]) if existing_ids.present?
 
-      result = phrases.page(page).per(Tolk::Phrase.per_page)
-      result
+      phrases
     end
 
-    def search_phrases(query, scope, page = nil, options = {})
+    def search_phrases(query, scope)
       return [] unless query.present?
 
       translations = case scope
@@ -150,11 +156,11 @@ module Tolk
 
       phrases = Tolk::Phrase.scoped(:order => 'tolk_phrases.key ASC')
       phrases = phrases.scoped(:conditions => ['tolk_phrases.id IN(?)', translations.map(&:phrase_id).uniq])
-      phrases.page(page)
+      phrases
     end
 
-    def search_phrases_without_translation(query, page = nil, options = {})
-      return phrases_without_translation(page, options) unless query.present?
+    def search_phrases_without_translation(query)
+      return phrases_without_translation unless query.present?
 
       phrases = Tolk::Phrase.scoped(:order => 'tolk_phrases.key ASC')
 
@@ -216,8 +222,8 @@ module Tolk
       true
     end
 
-    def find_phrases_with_translations(page, conditions = {})
-      result = Tolk::Phrase.page(page).find(:all,
+    def find_phrases_with_translations(conditions = {})
+      result = Tolk::Phrase.find(:all,
         :conditions => { :'tolk_translations.locale_id' => self.id }.merge(conditions),
         :joins => :translations, :order => 'tolk_phrases.key ASC')
 

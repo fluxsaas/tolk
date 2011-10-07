@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Tolk
   class SearchesController < Tolk::ApplicationController
     before_filter :find_locale

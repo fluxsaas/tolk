@@ -4,7 +4,7 @@
 <h3 class="switch">Completed translations <span>(<%= link_to 'See phrases missing translation', @locale %>)</span></h3>
 
 <% if @locale.has_updated_translations? && action_name != 'updated' %>
-  <span class="notice">Some phrases have changed. <%= link_to "Update translations", updated_tolk_locale_path(@locale) %>.</span>
+  <span class="notice">Some phrases have changed. <%= link_to "Update translations", tolk.updated_locale_path(@locale) %>.</span>
 <% end %>
 
 <div class="search">
@@ -13,7 +13,7 @@
 
 <div class="translations">
 <% if @phrases.any? %>
-  <% form_for @locale do |locale_form| %>
+  <%= form_for @locale do |locale_form| %>
         <table class="translations">
       <tr>
         <th class="translation"><%= @locale.language_name -%></th>
@@ -53,7 +53,7 @@
       <p><%= locale_form.submit "Save changes" %></p>
     </div>
     <div class="paginate">
-      <%= will_paginate @phrases, :renderer => Tolk::LinkRenderer %>
+      <%= paginate @phrases %>
     </div>
   <% end %>
 <% else %>

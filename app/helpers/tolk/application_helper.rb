@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Tolk
   module ApplicationHelper
     def format_i18n_value(value)

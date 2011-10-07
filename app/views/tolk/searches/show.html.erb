@@ -9,12 +9,12 @@
 <div class="search_exits">
   <%= link_to "Phrases missing translation", @locale %>
   &nbsp;
-  <%= link_to "Completed translations", all_tolk_locale_path(@locale) %>
+  <%= link_to "Completed translations", tolk.all_locale_path(@locale) %>
 </div>
 
 <div class="translations">
   <% if @phrases.any? %>
-     <% form_for @locale do |locale_form| %>
+     <%= form_for @locale do |locale_form| %>
       <table class="translations">
         <tr>
           <th class="translation"><%= @locale.language_name -%></th>
@@ -47,7 +47,7 @@
       </div>
     <% end %>
     <div class="paginate">
-      <%= will_paginate @phrases, :renderer => Tolk::LinkRenderer %>
+      <%= paginate @phrases %>
     </div>
   <% else %>
     <p style="text-align: left">No search results.</p>

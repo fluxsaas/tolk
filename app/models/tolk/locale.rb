@@ -1,5 +1,4 @@
 # encoding: UTF-8
-
 module Tolk
   class Locale < ActiveRecord::Base
     set_table_name "tolk_locales"

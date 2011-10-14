@@ -11,6 +11,7 @@ module Tolk
       'cz'    => 'Czech',
       'da'    => 'Danish',
       'de'    => 'German',
+      'de-st' => 'German - Staffomatic',
       'dsb'   => 'Lower Sorbian',
       'el'    => 'Greek',
       'en'    => 'English',
